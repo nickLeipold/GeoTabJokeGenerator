@@ -4,7 +4,7 @@ all:
 build:
 	dotnet build
 
-test: build
+test1: build
 	dotnet run --project ConsoleApp1 < test/NnCategory3.test
 test2: build
 	dotnet run --project ConsoleApp1 < test/names.test
@@ -12,5 +12,5 @@ test3: build
 	dotnet run --project ConsoleApp1 < test/nameCategory5.test
 test4: build
 	dotnet run --project ConsoleApp1 < test/customName.test
-testApi: build
-	dotnet run --project ConsoleApp1 --api < test/nameCategory5.test
+testCli: build
+	dotnet run --project ConsoleApp1 --cli < test/nameCategory5.test

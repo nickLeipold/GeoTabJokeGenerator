@@ -16,7 +16,7 @@ namespace ConsoleApp1
         {
             Boolean instructionsOn;
             //checks to see if we are in api mode which doesnt need to output menus
-            if (args.Length == 1 && string.Equals(args[0], "--api"))
+            if (args.Length == 1 && string.Equals(args[0], "--cli"))
             {
                 instructionsOn = false;
                 printer = new ConsolePrinter(false);
