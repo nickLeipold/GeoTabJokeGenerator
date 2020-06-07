@@ -13,12 +13,12 @@ namespace ConsoleApp1
         static string _url = "";
 
         public JsonFeed() { }
-        public JsonFeed(string endpoint, int results)
+        public JsonFeed(string endpoint)
         {
             _url = endpoint;
         }
         
-		public static string[] GetRandomJokes(string firstname, string lastname, string category)
+		public static string GetRandomJoke(string firstname, string lastname, string category)
 		{
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
@@ -42,7 +42,7 @@ namespace ConsoleApp1
                 joke = firstPart + " " + firstname + " " + lastname + secondPart;
             }
 
-            return new string[] { JsonConvert.DeserializeObject<dynamic>(joke).value };
+            return JsonConvert.DeserializeObject<dynamic>(joke).value;
         }
 
         /// <summary>
