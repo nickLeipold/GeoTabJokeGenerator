@@ -54,7 +54,8 @@ namespace ConsoleApp1
 		{
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
-			var result = client.GetStringAsync("").Result;
+			string url = "api/";
+			var result = client.GetStringAsync(url).Result;
 			return JsonConvert.DeserializeObject<dynamic>(result);
 		}
 
@@ -63,7 +64,9 @@ namespace ConsoleApp1
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
 
-			return new string[] { Task.FromResult(client.GetStringAsync("categories").Result).Result };
+			string url = "jokes/categories";
+
+			return new string[] { Task.FromResult(client.GetStringAsync(url).Result).Result };
 		}
     }
 }

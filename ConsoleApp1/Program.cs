@@ -11,7 +11,6 @@ namespace ConsoleApp1
     class Program
     {
         static string[] results = new string[50];
-        // static char key;
         static Tuple<string, string> names;
 
         static ConsolePrinter printer = new ConsolePrinter();
@@ -141,13 +140,13 @@ namespace ConsoleApp1
 
         private static String[] getCategories()
         {
-            new JsonFeed("https://api.chucknorris.io/jokes/categories");
+            new JsonFeed("https://api.chucknorris.io/");
             return JsonFeed.GetCategories();
         }
 
         private static Tuple<String,String> GetNames()
         {
-            new JsonFeed("http://uinames.com/api/");
+            new JsonFeed("https://names.privserv.com/");
             dynamic result = JsonFeed.Getnames();
             Console.WriteLine(result);
             return Tuple.Create(result.name.ToString(), result.surname.ToString());
