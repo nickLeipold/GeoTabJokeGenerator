@@ -11,13 +11,13 @@ namespace ConsoleApp1
     class Program
     {
         static string[] results = new string[50];
-        static Tuple<string, string> names;
 
         static ConsolePrinter printer = new ConsolePrinter();
 
         static void Main(string[] args)
         {
             Boolean instructionsOn;
+            Tuple<string, string> names = null;
             //checks to see if we are in api mode which doesnt need to output menus
             Console.WriteLine(args.Length + " : number of args");
             if (args.Length == 1 && string.Equals(args[0], "--api"))
@@ -52,7 +52,7 @@ namespace ConsoleApp1
                 {
                     printer.Value("Want to use a random name? y/n").ToString();
                     bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
-                    string category;
+                    string category = "";
 
                     if (decision)
                     {
@@ -68,7 +68,7 @@ namespace ConsoleApp1
 
                     printer.Value("How many jokes do you want? (1-9)").ToString();
                     int n = Int32.Parse(Console.ReadLine());
-                    results = GetRandomJokes(Console.ReadLine(), n);
+                    results = GetRandomJokes(category, n, names);
                     PrintResults(results);
                     
                 }
@@ -76,7 +76,6 @@ namespace ConsoleApp1
                 {
                     break;
                 }
-                names = null;
             }
 
 
@@ -85,9 +84,10 @@ namespace ConsoleApp1
 
         private static string selectCategory(){
             string category;
+            Console.WriteLine("Here are the available categories:");
             results = getCategories();
             Console.WriteLine("Here are the available categories:");
-            PrintResults(results);
+            PrintResults(results, 4);
             category = Console.ReadLine();
             if(results.Contains(category.ToLower())){
                 return category.ToLower();
@@ -105,12 +105,16 @@ namespace ConsoleApp1
             return false;
         }
 
-        private static void PrintResults(string[] results)
+        private static void PrintResults(string[] results, int indent = 0)
         {
-            // for(int i=0; i < results.Length; i++){
-            //     Console.WriteLine(results[i]);
-            // }
-            printer.Value(string.Join("\n", results)).ToString();
+            string spaces= "";
+            for(int i =0; i < indent; i++){
+                spaces += " ";
+            }
+            for(int i=0; i < results.Length; i++){
+                printer.Value(spaces + results[i]).ToString();
+            }
+            // printer.Value(string.Join("\n", results)).ToString();
         }
 
         private static char GetEnteredKey(String input)
@@ -152,17 +156,31 @@ namespace ConsoleApp1
             }
         }
 
-        private static String[] GetRandomJokes(string category, int number)
+        private static String[] GetRandomJokes(string category, int number, Tuple<string, string> names = null)
         {
-            string[] jokes = new string[50];
-            // new JsonFeed("https://api.chucknorris.io/", number);
-            new JsonFeed("https://api.chucknorris.io/");
-            for (int i = 0; i < number; i++)
-            {
-                jokes[i] = JsonFeed.GetRandomJoke(names?.Item1, names?.Item2, category);
+            if(names == null){
+                names = new Tuple<string,string>(null,null);
             }
+            string[] jokes = new string[number]; //hard coded max, should be made dynamic if time allows
+            new JsonFeed("https://api.chucknorris.io/");
+            //Console.WriteLine(names.Item1 + " " + names?.Item1);
             for (int i = 0; i < number; i++)
             {
+                jokes[i] = JsonFeed.GetRandomJoke(category);
+            }
+            // Console.WriteLine()
+            for (int i = 0; i < number; i++)
+            {
+
+                if (names.Item1 != null)
+                {
+                    string firstname = names.Item1;
+                    string lastname = names.Item2;
+                    int index = jokes[i].IndexOf("Chuck Norris");
+                    string firstPart = jokes[i].Substring(0, index);
+                    string secondPart = jokes[i].Substring(0 + index + "Chuck Norris".Length, jokes[i].Length - (index + "Chuck Norris".Length));
+                    jokes[i] = firstPart + " " + firstname + " " + lastname + secondPart;
+                }
                 Console.WriteLine(jokes[i]);
             }
             return jokes;
