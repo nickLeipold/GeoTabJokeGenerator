@@ -28,7 +28,7 @@
   These are for visual checking of output from the program as the jokes are dynamic and a dynamic test harness wasnt created in the time window.
 
   `make test#`
-  - will run a test (# is to be replaced with a number from 1-3)
+  - will run a test (# is to be replaced with a number from 1-4)
 
   `make testCli`
   - will run a small test that will only output the jokes new line seperated
@@ -38,7 +38,7 @@
   when they were called. THis was a quick fix of checking the composed url.
 
 ## Updated urls
-  Switched over to the new url that was needed for the names api as well as parsing the json object properly
+  Switched over to the new url that was needed for the names api as well as parsing the json object properly.
 
 ## Removed prompt for instructions
   I made the design decision/assumtion that if you are wanting to use the tool in non --cli mode,
@@ -64,12 +64,12 @@
   Upon choosing to select a category, the categories will be displayed for the user.
 
 ## Invalid input retires
-  I added recursive function calls to deal with invalid input to the user prompts. These could be limited to a certain depth of recursion with an added counter variable to the function, but I thought that to not be necessary
+  I added recursive function calls to deal with invalid input to the user prompts. These could be limited to a certain depth of recursion with an added counter variable to the function, but I thought that to not be necessary.
 
 ## Parsing the joke responses
   The joke responses from the api were not being properly parsed and passed back to the caller.
 
 ## Refactoring
   Worked on breaking the code blocks down into small descriptive functions.
-  Got rid of un-needed global variables
-  
+  Got rid of un-needed global variables.
+

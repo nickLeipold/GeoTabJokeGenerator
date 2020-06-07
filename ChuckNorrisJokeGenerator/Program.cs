@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace ConsoleApp1
+namespace ChuckNorrisJokeGenerator
 {
     class Program
     {
@@ -35,27 +35,34 @@ namespace ConsoleApp1
                     printMainMenuOptions();
                 }
 
-                char key = GetEnteredKey(Console.ReadLine());
-
-                if (key == 'c')
-                {
-                    printAvailableCategories();
-                }
-                else if (key == 'r')
-                {
-                    buildRandomJokes(instructionsOn);
-
-                }
-                else if (key == 'q')
+                if (handleMainMenuKeyPress(GetEnteredKey(Console.ReadLine()), instructionsOn) == 'q')
                 {
                     break;
                 }
-                else
-                {
-                    printer.Value("Invalid option selected").ToString();
-                }
+
             }
 
+
+        }
+
+        private static char handleMainMenuKeyPress(char key, bool instructionsOn)
+        {
+            switch (key)
+            {
+                case 'c':
+                    printAvailableCategories();
+                    break;
+                case 'r':
+                    buildRandomJokes(instructionsOn);
+                    break;
+                case 'q':
+                    break;
+                default:
+                    printer.Value("Invalid option selected").ToString();
+                    break;
+
+            }
+            return key;
 
         }
 
@@ -114,7 +121,7 @@ namespace ConsoleApp1
             printer.Value("Enter the last name:").ToString();
             String lastName = Console.ReadLine();
 
-            printer.Value("Would you like to use the name " + firstName + " " + lastName+ "? (y/n)").ToString();
+            printer.Value("Would you like to use the name " + firstName + " " + lastName + "? (y/n)").ToString();
             bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
             if (decision)
             {
@@ -172,19 +179,11 @@ namespace ConsoleApp1
 
         private static bool validRange(int number)
         {
-            if (number > 0 && number <= 20)
-            {
-                return true;
-            }
-            return false;
+            return number > 0 && number <= 20;
         }
         private static bool detectBooleanResponse(char key)
         {
-            if (key == 'y')
-            {
-                return true;
-            }
-            return false;
+            return key == 'y';
         }
 
         private static void PrintResults(string[] results, int indent = 0, bool force = false)
@@ -257,21 +256,28 @@ namespace ConsoleApp1
             return jokes;
         }
 
-        private static string replaceName(string oldVale, string newValue, string words)
+        private static string replaceName(string oldValue, string newValue, string words)
         {
-            //will check for a plural of Chuck Norris and replace ith the appropriate plural of the new name
+            words = replacePluralName(oldValue, newValue, words);
+
+            words = words.Replace(oldValue, newValue);
+            return words.Replace(oldValue.ToUpper(), newValue.ToUpper());
+        }
+
+        private static string replacePluralName(string oldValue, string newValue, string words)
+        {
+            //will check for a plural of Chuck Norris and replace with the appropriate plural of the new name
             if (newValue.ToLower().Last() == 's')
             {
-                words = words.Replace("Chuck Norris'", newValue + "'");
-                words = words.Replace("CHUCK NORRIS'", newValue + "'");
+                words = words.Replace(oldValue+"'", newValue + "'");
+                words = words.Replace(oldValue.ToUpper()+"'", newValue + "'");
             }
             else
             {
-                words = words.Replace("Chuck Norris'", newValue + "'s");
-                words = words.Replace("CHUCK NORRIS'", newValue + "'s");
+                words = words.Replace(oldValue+"'", newValue + "'s");
+                words = words.Replace(oldValue.ToUpper()+"'", newValue + "'s");
             }
-            words = words.Replace("Chuck Norris", newValue);
-            return words.Replace("CHUCK NORRIS", newValue.ToUpper());
+            return words;
         }
         private static String[] getCategories()
         {
