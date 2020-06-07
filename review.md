@@ -75,6 +75,12 @@
 
 
 
+
+## Retrospective
+Worked through lots of the problems and had a good idea in my mind of what to program next.
+I don't quite understand how the JsonFeed class works in relation to how its initialized and used, but I believe this to be some sort of C# trick that i will learn in time. The other classes were cleaned up and made to work properly, and with the use of the printer function adding debug only print messages would be very easy to implement. 
+Was an interesting learning expereience and I hope to work with GeoTab more in the future.
+
 ## Author
 Completed by Nickolas Leipold
 github: nickLeipold
