@@ -23,11 +23,13 @@ namespace ConsoleApp1
             if (args.Length == 1 && string.Equals(args[0], "--api"))
             {
                 instructionsOn = false;
-            }else {
+            }
+            else
+            {
                 instructionsOn = true;
                 printer.Value("Welcome to the joke generator, below are options to generate jokes").ToString();
             }
-            
+
 
             while (true)
             {
@@ -49,26 +51,26 @@ namespace ConsoleApp1
                 else if (key == 'r')
                 {
                     printer.Value("Want to use a random name? y/n").ToString();
-                    key = GetEnteredKey(Console.ReadLine());
-                    if (key == 'y')
+                    bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
+                    string category;
+
+                    if (decision)
+                    {
                         names = GetNames();
+                    }
+
                     printer.Value("Want to specify a category? y/n").ToString();
-                    if (key == 'y')
-                    {
-                        printer.Value("How many jokes do you want? (1-9)").ToString();
-                        int n = Int32.Parse(Console.ReadLine());
-                        printer.Value("Enter a category;").ToString();
-                        results = GetRandomJokes(Console.ReadLine(), n);
-                        PrintResults(results);
+                    decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
+                    if(decision){
+                        category = selectCategory();
+                        Console.WriteLine("debug: selected category:  " + category);
                     }
-                    else
-                    {
-                        printer.Value("How many jokes do you want? (1-9)").ToString();
-                        int n = Int32.Parse(Console.ReadLine());
-                        Console.WriteLine(n);
-                        results = GetRandomJokes(null, n);
-                        PrintResults(results);
-                    }
+
+                    printer.Value("How many jokes do you want? (1-9)").ToString();
+                    int n = Int32.Parse(Console.ReadLine());
+                    results = GetRandomJokes(Console.ReadLine(), n);
+                    PrintResults(results);
+                    
                 }
                 else if (key == 'q')
                 {
@@ -80,9 +82,35 @@ namespace ConsoleApp1
 
         }
 
+
+        private static string selectCategory(){
+            string category;
+            results = getCategories();
+            Console.WriteLine("Here are the available categories:");
+            PrintResults(results);
+            category = Console.ReadLine();
+            if(results.Contains(category.ToLower())){
+                return category.ToLower();
+            }else {
+                //will recursively call itself if the input category is not available.
+                Console.WriteLine("The category '" + category + "' is not a valid option, please choose again");
+                return selectCategory();
+            }
+        }
+        private static bool detectBooleanResponse(char key)
+        {
+            if(key == 'y'){
+                return true;
+            }
+            return false;
+        }
+
         private static void PrintResults(string[] results)
         {
-            printer.Value("[" + string.Join(",", results) + "]").ToString();
+            // for(int i=0; i < results.Length; i++){
+            //     Console.WriteLine(results[i]);
+            // }
+            printer.Value(string.Join("\n", results)).ToString();
         }
 
         private static char GetEnteredKey(String input)
@@ -129,10 +157,12 @@ namespace ConsoleApp1
             string[] jokes = new string[50];
             // new JsonFeed("https://api.chucknorris.io/", number);
             new JsonFeed("https://api.chucknorris.io/");
-            for(int i=0; i<number; i++){
+            for (int i = 0; i < number; i++)
+            {
                 jokes[i] = JsonFeed.GetRandomJoke(names?.Item1, names?.Item2, category);
             }
-            for(int i=0; i<number; i++){
+            for (int i = 0; i < number; i++)
+            {
                 Console.WriteLine(jokes[i]);
             }
             return jokes;
@@ -144,7 +174,7 @@ namespace ConsoleApp1
             return JsonFeed.GetCategories();
         }
 
-        private static Tuple<String,String> GetNames()
+        private static Tuple<String, String> GetNames()
         {
             new JsonFeed("https://names.privserv.com/");
             dynamic result = JsonFeed.Getnames();

@@ -66,7 +66,8 @@ namespace ConsoleApp1
 
 			string url = "jokes/categories";
 
-			return new string[] { Task.FromResult(client.GetStringAsync(url).Result).Result };
+			var result = client.GetStringAsync(url).Result;
+			return JsonConvert.DeserializeObject<string[]>(result);
 		}
     }
 }
