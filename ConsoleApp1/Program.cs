@@ -109,12 +109,12 @@ namespace ConsoleApp1
 
         private static Tuple<String, String> EnterName()
         {
-            printer.Value("Enter the first name:");
+            printer.Value("Enter the first name:").ToString();
             String firstName = Console.ReadLine();
-            printer.Value("Enter the last name:");
+            printer.Value("Enter the last name:").ToString();
             String lastName = Console.ReadLine();
 
-            printer.Value("Would you like to use the name " + firstName + " " + lastName+ "?");
+            printer.Value("Would you like to use the name " + firstName + " " + lastName+ "? (y/n)").ToString();
             bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
             if (decision)
             {
@@ -260,15 +260,18 @@ namespace ConsoleApp1
         private static string replaceName(string oldVale, string newValue, string words)
         {
             //will check for a plural of Chuck Norris and replace ith the appropriate plural of the new name
-            if (newValue.Last() == 's')
+            if (newValue.ToLower().Last() == 's')
             {
                 words = words.Replace("Chuck Norris'", newValue + "'");
+                words = words.Replace("CHUCK NORRIS'", newValue + "'");
             }
             else
             {
                 words = words.Replace("Chuck Norris'", newValue + "'s");
+                words = words.Replace("CHUCK NORRIS'", newValue + "'s");
             }
-            return words.Replace("Chuck Norris", newValue);
+            words = words.Replace("Chuck Norris", newValue);
+            return words.Replace("CHUCK NORRIS", newValue.ToUpper());
         }
         private static String[] getCategories()
         {
