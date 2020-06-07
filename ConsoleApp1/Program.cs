@@ -12,17 +12,17 @@ namespace ConsoleApp1
     {
         static string[] results = new string[50];
 
-        static ConsolePrinter printer = new ConsolePrinter();
+        static ConsolePrinter printer = new ConsolePrinter(true);
 
         static void Main(string[] args)
         {
             Boolean instructionsOn;
             Tuple<string, string> names = null;
             //checks to see if we are in api mode which doesnt need to output menus
-            Console.WriteLine(args.Length + " : number of args");
             if (args.Length == 1 && string.Equals(args[0], "--api"))
             {
                 instructionsOn = false;
+                printer = new ConsolePrinter(false);
             }
             else
             {
@@ -46,7 +46,7 @@ namespace ConsoleApp1
                 if (key == 'c')
                 {
                     results = getCategories();
-                    PrintResults(results,2);
+                    PrintResults(results, 2);
                 }
                 else if (key == 'r')
                 {
@@ -61,22 +61,25 @@ namespace ConsoleApp1
 
                     printer.Value("Want to specify a category? y/n").ToString();
                     decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
-                    if(decision){
+                    if (decision)
+                    {
                         category = selectCategory();
                     }
 
                     printer.Value("How many jokes do you want? (1-9)").ToString();
                     int n = Int32.Parse(Console.ReadLine());
                     results = GetRandomJokes(category, n, names);
-                    Console.WriteLine("Here are your jokes you asked for:");
-                    PrintResults(results, 2);
-                    
+                    printer.Value("Here are your jokes you asked for:").ToString();
+                    PrintResults(results, 2, !instructionsOn);
+
                 }
                 else if (key == 'q')
                 {
                     break;
-                }else {
-                    Console.WriteLine("Invalid option selected");
+                }
+                else
+                {
+                    printer.Value("Invalid option selected").ToString();
                 }
             }
 
@@ -84,38 +87,48 @@ namespace ConsoleApp1
         }
 
 
-        private static string selectCategory(){
+        private static string selectCategory()
+        {
             string category;
-            Console.WriteLine("Here are the available categories:");
+
+            printer.Value("Here are the available categories:").ToString();
             results = getCategories();
             PrintResults(results, 2);
             category = Console.ReadLine();
-            if(results.Contains(category.ToLower())){
+            if (results.Contains(category.ToLower()))
+            {
                 return category.ToLower();
-            }else {
+            }
+            else
+            {
                 //will recursively call itself if the input category is not available.
-                Console.WriteLine("The category '" + category + "' is not a valid option, please choose again");
+                printer.Value("The category '" + category + "' is not a valid option, please choose again").ToString();
                 return selectCategory();
             }
         }
         private static bool detectBooleanResponse(char key)
         {
-            if(key == 'y'){
+            if (key == 'y')
+            {
                 return true;
             }
             return false;
         }
 
-        private static void PrintResults(string[] results, int indent = 0)
+        private static void PrintResults(string[] results, int indent = 0, bool force = false)
         {
-            string spaces= "";
-            for(int i =0; i < indent; i++){
+            string spaces = "";
+            if(force){
+                indent = 0;
+            }
+            for (int i = 0; i < indent; i++)
+            {
                 spaces += " ";
             }
-            for(int i=0; i < results.Length; i++){
-                printer.Value(spaces + results[i]).ToString();
+            for (int i = 0; i < results.Length; i++)
+            {
+                printer.Value(spaces + results[i]).ToStringForce();
             }
-            // printer.Value(string.Join("\n", results)).ToString();
         }
 
         private static char GetEnteredKey(String input)
@@ -159,8 +172,9 @@ namespace ConsoleApp1
 
         private static String[] GetRandomJokes(string category, int number, Tuple<String, String> names = null)
         {
-            if(names == null){
-                names = new Tuple<String,String>(null,null);
+            if (names == null)
+            {
+                names = new Tuple<String, String>(null, null);
             }
             string[] jokes = new string[number]; //hard coded max, should be made dynamic if time allows
             new JsonFeed("https://api.chucknorris.io/");
@@ -177,15 +191,22 @@ namespace ConsoleApp1
                 {
                     string firstname = names.Item1;
                     string lastname = names.Item2;
-                    int index = jokes[i].IndexOf("Chuck Norris");
-                    string firstPart = jokes[i].Substring(0, index);
-                    string secondPart = jokes[i].Substring(0 + index + "Chuck Norris".Length, jokes[i].Length - (index + "Chuck Norris".Length));
-                    jokes[i] = firstPart + firstname + " " + lastname + secondPart;
+                    jokes[i] = replaceName("Chuck Norris", firstname + " " + lastname, jokes[i]);
+                    
                 }
             }
             return jokes;
         }
 
+        private static string replaceName(string oldVale, string newValue, string words) {
+            //will check for a plural of Chuck Norris and replace ith the appropriate plural of the new name
+            if(newValue.Last() == 's') {
+                words = words.Replace("Chuck Norris'", newValue + "'");
+            }else {
+                words = words.Replace("Chuck Norris'", newValue + "'s");
+            }
+            return words.Replace("Chuck Norris", newValue);
+        }
         private static String[] getCategories()
         {
             new JsonFeed("https://api.chucknorris.io/");

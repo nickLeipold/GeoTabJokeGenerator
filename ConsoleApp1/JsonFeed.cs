@@ -47,11 +47,7 @@ namespace ConsoleApp1
 			client.BaseAddress = new Uri(_url);
 			string url = "api/";
 			var result = client.GetStringAsync(url).Result;
-			Console.WriteLine(result);
 			dynamic response = JsonConvert.DeserializeObject<dynamic>(result);
-			// Console.WriteLine(response.SelectToken("name"));
-			// Console.WriteLine(typeof response.SelectToken("name"));
-			// Console.WriteLine(response.surname);
 
 			Tuple<String, String> names = new Tuple<string, string>(response.SelectToken("name").ToString(), response.SelectToken("surname").ToString());
 			return names;

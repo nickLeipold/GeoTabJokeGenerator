@@ -10,6 +10,11 @@ namespace ConsoleApp1
 {
     public class ConsolePrinter
     {
+        bool _print;
+        public ConsolePrinter(bool print)
+        {
+            this._print = print;
+        }
         public static object PrintValue;
 
         public ConsolePrinter Value(string value)
@@ -19,6 +24,13 @@ namespace ConsoleApp1
         }
 
         public override string ToString()
+        {
+            if(_print)
+                Console.WriteLine(PrintValue);
+            return null;
+        }
+        //forces the print even if not in print mode
+        public string ToStringForce()
         {
             Console.WriteLine(PrintValue);
             return null;
