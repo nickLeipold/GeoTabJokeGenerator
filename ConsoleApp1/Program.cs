@@ -46,7 +46,7 @@ namespace ConsoleApp1
                 if (key == 'c')
                 {
                     results = getCategories();
-                    PrintResults(results);
+                    PrintResults(results,2);
                 }
                 else if (key == 'r')
                 {
@@ -63,18 +63,20 @@ namespace ConsoleApp1
                     decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
                     if(decision){
                         category = selectCategory();
-                        Console.WriteLine("debug: selected category:  " + category);
                     }
 
                     printer.Value("How many jokes do you want? (1-9)").ToString();
                     int n = Int32.Parse(Console.ReadLine());
                     results = GetRandomJokes(category, n, names);
-                    PrintResults(results);
+                    Console.WriteLine("Here are your jokes you asked for:");
+                    PrintResults(results, 2);
                     
                 }
                 else if (key == 'q')
                 {
                     break;
+                }else {
+                    Console.WriteLine("Invalid option selected");
                 }
             }
 
@@ -86,8 +88,7 @@ namespace ConsoleApp1
             string category;
             Console.WriteLine("Here are the available categories:");
             results = getCategories();
-            Console.WriteLine("Here are the available categories:");
-            PrintResults(results, 4);
+            PrintResults(results, 2);
             category = Console.ReadLine();
             if(results.Contains(category.ToLower())){
                 return category.ToLower();
@@ -163,7 +164,6 @@ namespace ConsoleApp1
             }
             string[] jokes = new string[number]; //hard coded max, should be made dynamic if time allows
             new JsonFeed("https://api.chucknorris.io/");
-            Console.WriteLine(names.Item1 + " " + names?.Item1);
             // Console.WriteLine("category: '" + category+"'");
             for (int i = 0; i < number; i++)
             {
@@ -182,7 +182,6 @@ namespace ConsoleApp1
                     string secondPart = jokes[i].Substring(0 + index + "Chuck Norris".Length, jokes[i].Length - (index + "Chuck Norris".Length));
                     jokes[i] = firstPart + firstname + " " + lastname + secondPart;
                 }
-                // Console.WriteLine(jokes[i]);
             }
             return jokes;
         }
