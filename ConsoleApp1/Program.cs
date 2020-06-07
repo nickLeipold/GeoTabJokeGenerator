@@ -27,7 +27,7 @@ namespace ConsoleApp1
                 printer.Value("Welcome to the Chuck Norris joke generator, below are options to generate jokes").ToString();
             }
 
-
+            //execution loop
             while (true)
             {
                 if (instructionsOn)
@@ -39,9 +39,7 @@ namespace ConsoleApp1
 
                 if (key == 'c')
                 {
-                    string[] results = null;
-                    results = getCategories();
-                    PrintResults(results, 2);
+                    printAvailableCategories();
                 }
                 else if (key == 'r')
                 {
@@ -101,10 +99,7 @@ namespace ConsoleApp1
         {
             string category;
             string[] results;
-
-            printer.Value("Here are the available categories:").ToString();
-            results = getCategories();
-            PrintResults(results, 2);
+            results = printAvailableCategories();
             category = Console.ReadLine();
             if (results.Contains(category.ToLower()))
             {
@@ -116,6 +111,15 @@ namespace ConsoleApp1
                 printer.Value("The category '" + category + "' is not a valid option, please choose again").ToString();
                 return selectCategory();
             }
+        }
+
+        private static string[] printAvailableCategories()
+        {
+            string[] results;
+            printer.Value("Here are the available categories:").ToString();
+            results = getCategories();
+            PrintResults(results, 2);
+            return results;
         }
 
         private static int detectNumberResponse(string response)
@@ -168,9 +172,12 @@ namespace ConsoleApp1
             }
             for (int i = 0; i < results.Length; i++)
             {
-                if(force){
-                printer.Value(spaces + results[i]).ToStringForce();
-                }else{
+                if (force)
+                {
+                    printer.Value(spaces + results[i]).ToStringForce();
+                }
+                else
+                {
                     printer.Value(spaces + results[i]).ToString();
                 }
             }
@@ -188,29 +195,31 @@ namespace ConsoleApp1
                     return 'y';
                 case "q":
                     return 'q';
-                case "?":
-                    return '?';
+                case "n":
+                    return 'n';
                 default:
-                    return '!';
+                    printer.Value("Invalid option, please try again").ToString();
+                    return GetEnteredKey(Console.ReadLine());
             }
         }
 
         private static String[] GetRandomJokes(string category, int number, Tuple<String, String> names = null)
         {
+            //if no names were passed in default to null strings
             if (names == null)
             {
                 names = new Tuple<String, String>(null, null);
             }
-            string[] jokes = new string[number]; //hard coded max, should be made dynamic if time allows
+            string[] jokes = new string[number];
             new JsonFeed("https://api.chucknorris.io/");
-            for (int i = 0; i < number; i++)
+            for (int i = 0; i < number; i++) //loop through and get jokes
             {
                 jokes[i] = JsonFeed.GetRandomJoke(category);
             }
-            for (int i = 0; i < number; i++)
+            //loop through the jokes and replace names if names are available
+            if (names.Item1 != null)
             {
-
-                if (names.Item1 != null)
+                for (int i = 0; i < number; i++)
                 {
                     string firstname = names.Item1;
                     string lastname = names.Item2;

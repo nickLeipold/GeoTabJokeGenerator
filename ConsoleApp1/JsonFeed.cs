@@ -17,22 +17,30 @@ namespace ConsoleApp1
         {
             _url = endpoint;
         }
-        
-		public static string GetRandomJoke(string category)
-		{
-			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
-			string url = "jokes/random";
-			if (category != null && !string.Equals(category, ""))
-			{
-				url += "?";
-				url += "category=";
-				url += category;
-			}
-			
-			dynamic response = JsonConvert.DeserializeObject<dynamic>(Task.FromResult(client.GetStringAsync(url).Result).Result);
 
-            return response.value;
+        public static string GetRandomJoke(string category)
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(_url);
+                string url = "jokes/random";
+                if (category != null && !string.Equals(category, ""))
+                {
+                    url += "?";
+                    url += "category=";
+                    url += category;
+                }
+
+                dynamic response = JsonConvert.DeserializeObject<dynamic>(Task.FromResult(client.GetStringAsync(url).Result).Result);
+
+                return response.value;
+            }
+            catch (System.Exception)
+            {
+				Console.WriteLine("Error: the conncetion to the random joke server has failed");
+                throw;
+            }
 
         }
 
@@ -41,27 +49,45 @@ namespace ConsoleApp1
         /// </summary>
         /// <param name="client2"></param>
         /// <returns></returns>
-		public static Tuple<String,String> Getnames()
-		{
-			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
-			string url = "api/";
-			var result = client.GetStringAsync(url).Result;
-			dynamic response = JsonConvert.DeserializeObject<dynamic>(result);
+		public static Tuple<String, String> Getnames()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(_url);
+                string url = "api/";
+                var result = client.GetStringAsync(url).Result;
+                dynamic response = JsonConvert.DeserializeObject<dynamic>(result);
 
-			Tuple<String, String> names = new Tuple<string, string>(response.SelectToken("name").ToString(), response.SelectToken("surname").ToString());
-			return names;
-		}
+                Tuple<String, String> names = new Tuple<string, string>(response.SelectToken("name").ToString(), response.SelectToken("surname").ToString());
+                return names;
 
-		public static string[] GetCategories()
-		{
-			HttpClient client = new HttpClient();
-			client.BaseAddress = new Uri(_url);
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Error: the connection to the names server has failed");
+                throw;
+            }
+        }
 
-			string url = "jokes/categories";
+        public static string[] GetCategories()
+        {
+            try
+            {
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri(_url);
 
-			var result = client.GetStringAsync(url).Result;
-			return JsonConvert.DeserializeObject<string[]>(result);
-		}
+                string url = "jokes/categories";
+
+                var result = client.GetStringAsync(url).Result;
+                return JsonConvert.DeserializeObject<string[]>(result);
+            }
+            catch (System.Exception)
+            {
+                Console.WriteLine("Error: the connection to the categories server has failed");
+                throw;
+            }
+
+        }
     }
 }
