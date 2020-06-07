@@ -70,13 +70,24 @@ namespace ConsoleApp1
         private static void buildRandomJokes(bool instructionsOn)
         {
             Tuple<string, string> names = null;
-            string[] results = null;
+            string[] results;
             string category = "";
-            printer.Value("Want to use a random name? y/n").ToString();
+
+            printer.Value("Want to provide an name? y/n").ToString();
             bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
             if (decision)
             {
-                names = GetNames();
+                names = EnterName();
+            }
+            else
+            {
+
+                printer.Value("Want to use a random name? y/n").ToString();
+                decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
+                if (decision)
+                {
+                    names = GetName();
+                }
             }
 
             printer.Value("Want to specify a category? y/n").ToString();
@@ -95,6 +106,23 @@ namespace ConsoleApp1
         }
 
 
+
+        private static Tuple<String, String> EnterName()
+        {
+            printer.Value("Enter the first name:");
+            String firstName = Console.ReadLine();
+            printer.Value("Enter the last name:");
+            String lastName = Console.ReadLine();
+
+            printer.Value("Would you like to use the name " + firstName + " " + lastName+ "?");
+            bool decision = detectBooleanResponse(GetEnteredKey(Console.ReadLine()));
+            if (decision)
+            {
+                return new Tuple<string, string>(firstName, lastName);
+            }
+            return EnterName();
+
+        }
         private static string selectCategory()
         {
             string category;
@@ -224,7 +252,6 @@ namespace ConsoleApp1
                     string firstname = names.Item1;
                     string lastname = names.Item2;
                     jokes[i] = replaceName("Chuck Norris", firstname + " " + lastname, jokes[i]);
-
                 }
             }
             return jokes;
@@ -249,7 +276,7 @@ namespace ConsoleApp1
             return JsonFeed.GetCategories();
         }
 
-        private static Tuple<String, String> GetNames()
+        private static Tuple<String, String> GetName()
         {
             new JsonFeed("https://names.privserv.com/");
             return JsonFeed.Getnames();
