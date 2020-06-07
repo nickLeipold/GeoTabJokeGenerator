@@ -156,14 +156,15 @@ namespace ConsoleApp1
             }
         }
 
-        private static String[] GetRandomJokes(string category, int number, Tuple<string, string> names = null)
+        private static String[] GetRandomJokes(string category, int number, Tuple<String, String> names = null)
         {
             if(names == null){
-                names = new Tuple<string,string>(null,null);
+                names = new Tuple<String,String>(null,null);
             }
             string[] jokes = new string[number]; //hard coded max, should be made dynamic if time allows
             new JsonFeed("https://api.chucknorris.io/");
-            //Console.WriteLine(names.Item1 + " " + names?.Item1);
+            Console.WriteLine(names.Item1 + " " + names?.Item1);
+            // Console.WriteLine("category: '" + category+"'");
             for (int i = 0; i < number; i++)
             {
                 jokes[i] = JsonFeed.GetRandomJoke(category);
@@ -179,9 +180,9 @@ namespace ConsoleApp1
                     int index = jokes[i].IndexOf("Chuck Norris");
                     string firstPart = jokes[i].Substring(0, index);
                     string secondPart = jokes[i].Substring(0 + index + "Chuck Norris".Length, jokes[i].Length - (index + "Chuck Norris".Length));
-                    jokes[i] = firstPart + " " + firstname + " " + lastname + secondPart;
+                    jokes[i] = firstPart + firstname + " " + lastname + secondPart;
                 }
-                Console.WriteLine(jokes[i]);
+                // Console.WriteLine(jokes[i]);
             }
             return jokes;
         }
@@ -195,9 +196,7 @@ namespace ConsoleApp1
         private static Tuple<String, String> GetNames()
         {
             new JsonFeed("https://names.privserv.com/");
-            dynamic result = JsonFeed.Getnames();
-            Console.WriteLine(result);
-            return Tuple.Create(result.name.ToString(), result.surname.ToString());
+            return JsonFeed.Getnames();
         }
     }
 }

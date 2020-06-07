@@ -23,16 +23,16 @@ namespace ConsoleApp1
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
 			string url = "jokes/random";
-			if (category != null)
+			if (category != null && !string.Equals(category, ""))
 			{
 				url += "?";
 				url += "category=";
 				url += category;
 			}
 			
+			dynamic response = JsonConvert.DeserializeObject<dynamic>(Task.FromResult(client.GetStringAsync(url).Result).Result);
 
-
-            return Task.FromResult(client.GetStringAsync(url).Result).Result;
+            return response.value;
 
         }
 
@@ -41,13 +41,20 @@ namespace ConsoleApp1
         /// </summary>
         /// <param name="client2"></param>
         /// <returns></returns>
-		public static dynamic Getnames()
+		public static Tuple<String,String> Getnames()
 		{
 			HttpClient client = new HttpClient();
 			client.BaseAddress = new Uri(_url);
 			string url = "api/";
 			var result = client.GetStringAsync(url).Result;
-			return JsonConvert.DeserializeObject<dynamic>(result);
+			Console.WriteLine(result);
+			dynamic response = JsonConvert.DeserializeObject<dynamic>(result);
+			// Console.WriteLine(response.SelectToken("name"));
+			// Console.WriteLine(typeof response.SelectToken("name"));
+			// Console.WriteLine(response.surname);
+
+			Tuple<String, String> names = new Tuple<string, string>(response.SelectToken("name").ToString(), response.SelectToken("surname").ToString());
+			return names;
 		}
 
 		public static string[] GetCategories()
