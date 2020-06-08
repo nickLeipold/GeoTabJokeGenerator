@@ -28,7 +28,7 @@
   These are for visual checking of output from the program as the jokes are dynamic and a dynamic test harness wasn't created in the time window.
 
   `make test#`
-  - will run a test (# is to be replaced with a number from 1-4)
+  - will run a test (# is to be replaced with a number from 1-5)
 
   `make testCli`
   - will run a small test that will only output the jokes new line separated
@@ -80,6 +80,10 @@
 Worked through lots of the problems and had a good idea in my mind of what to program next.
 I don't quite understand how the JsonFeed class works in relation to how its initialized and used, but I believe this to be some sort of C# trick that i will learn in time. The other classes were cleaned up and made to work properly, and with the use of the printer function adding debug only print messages would be very easy to implement. 
 Was an interesting learning expereience and I hope to work with GeoTab more in the future.
+
+
+## hicups
+You can find an image in the repo called `connectionProblems.png`, i found the apis would sometimes go unresponsive
 
 ## Author
 Completed by Nickolas Leipold

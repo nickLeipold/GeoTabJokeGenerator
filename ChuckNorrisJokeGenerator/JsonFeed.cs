@@ -22,6 +22,7 @@ namespace ChuckNorrisJokeGenerator
         {
             try
             {
+                new JsonFeed("https://api.chucknorris.io/");
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(_url);
                 string url = "jokes/random";
@@ -44,15 +45,12 @@ namespace ChuckNorrisJokeGenerator
 
         }
 
-        /// <summary>
         /// returns an object that contains name and surname
-        /// </summary>
-        /// <param name="client2"></param>
-        /// <returns></returns>
 		public static Tuple<String, String> Getnames()
         {
             try
             {
+                new JsonFeed("https://names.privserv.com/");
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(_url);
                 string url = "api/";
@@ -74,6 +72,7 @@ namespace ChuckNorrisJokeGenerator
         {
             try
             {
+                new JsonFeed("https://api.chucknorris.io/");
                 HttpClient client = new HttpClient();
                 client.BaseAddress = new Uri(_url);
 

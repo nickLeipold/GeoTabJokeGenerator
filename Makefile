@@ -12,5 +12,8 @@ test3: build
 	dotnet run --project ChuckNorrisJokeGenerator < test/nameCategory5.test
 test4: build
 	dotnet run --project ChuckNorrisJokeGenerator < test/customName.test
+test5: build
+	dotnet run --project ChuckNorrisJokeGenerator < test/NnCategory20.test
+
 testCli: build
 	dotnet run --project ChuckNorrisJokeGenerator --cli < test/nameCategory5.test

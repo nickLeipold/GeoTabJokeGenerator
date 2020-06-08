@@ -238,7 +238,6 @@ namespace ChuckNorrisJokeGenerator
                 names = new Tuple<String, String>(null, null);
             }
             string[] jokes = new string[number];
-            new JsonFeed("https://api.chucknorris.io/");
             for (int i = 0; i < number; i++) //loop through and get jokes
             {
                 jokes[i] = JsonFeed.GetRandomJoke(category);
@@ -281,13 +280,11 @@ namespace ChuckNorrisJokeGenerator
         }
         private static String[] getCategories()
         {
-            new JsonFeed("https://api.chucknorris.io/");
             return JsonFeed.GetCategories();
         }
 
         private static Tuple<String, String> GetName()
         {
-            new JsonFeed("https://names.privserv.com/");
             return JsonFeed.Getnames();
         }
     }
